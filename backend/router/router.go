@@ -4,12 +4,25 @@ import (
 	"exchangeapp/backend/controllers"
 	"exchangeapp/backend/middlewares"
 	"net/http"
+	"time"
+
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 )
 
 func SetUpRouter() *gin.Engine {
 	r := gin.Default()
+
+	// cors 配置
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	auth := r.Group("/api/auth")
 	{
